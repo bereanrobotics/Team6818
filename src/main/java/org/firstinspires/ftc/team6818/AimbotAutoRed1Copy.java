@@ -43,7 +43,7 @@ import edu.berean.robotics.dopple.core.DoppleBotHistoryRecord;
 import edu.berean.robotics.dopple.util.DoppleBotHistoryHelper;
 import edu.berean.robotics.robots.team6818.HardwareDoppleBotAimbot;
 
-@Autonomous(name = "Aimbot: BLUE 1", group = "Aimbot")
+@Autonomous(name = "Aimbot: RED 1 Copy", group = "Aimbot")
 //@Disabled
 
 /**
@@ -51,19 +51,18 @@ import edu.berean.robotics.robots.team6818.HardwareDoppleBotAimbot;
  * <p>
  * Enables control of the robot via the gamepad
  */
-public class AimbotAutoBlue1 extends LinearOpMode {
+public class AimbotAutoRed1Copy extends LinearOpMode {
 
     private static String ROBOT_HISTORY_DIRECTORY = "./files/";
-    private static String PLAY_FILENAME = "BLUE_1.txt";
-    private String LOG_TAG = "AIMBOT BLUE 1 - ";
+    private static String PLAY_FILENAME = "RED_1.txt";
+    private String LOG_TAG = "AIMBOT RED 1 Copy - ";
 
     protected HardwareDoppleBotAimbot robot = new HardwareDoppleBotAimbot();
 
 
-    /**
-     * Constructor
+    /**     * Constructor
      */
-    public AimbotAutoBlue1() {
+    public AimbotAutoRed1Copy() {
 
     }
 
@@ -75,11 +74,6 @@ public class AimbotAutoBlue1 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        telemetry.addData("Status", "Initializing.");
-        telemetry.update();
-
-        RobotLog.i(LOG_TAG + "initializing robot");
-        robot.initializeRobot(hardwareMap);
         File historyFile = new File (Environment.getExternalStorageDirectory().getAbsolutePath() + ROBOT_HISTORY_DIRECTORY + PLAY_FILENAME);
 
         RobotLog.d(LOG_TAG + "file obtained for playback: %s", historyFile);
@@ -91,7 +85,7 @@ public class AimbotAutoBlue1 extends LinearOpMode {
             robot.startPlayback(historyToPlay, this);
         } else RobotLog.w(LOG_TAG + String.format("Couldn't load most recent file from %s", historyFile.toString()));
 
-        robot.stopRobot();
+
 
 
     }

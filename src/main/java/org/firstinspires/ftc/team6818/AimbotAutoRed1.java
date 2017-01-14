@@ -60,8 +60,7 @@ public class AimbotAutoRed1 extends LinearOpMode {
     protected HardwareDoppleBotAimbot robot = new HardwareDoppleBotAimbot();
 
 
-    /**
-     * Constructor
+    /**     * Constructor
      */
     public AimbotAutoRed1() {
 

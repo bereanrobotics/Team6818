@@ -19,10 +19,11 @@ public class HardwareAimbot
     public DcMotor frontRightMotor = null;
     public DcMotor backLeftMotor = null;
     public DcMotor backRightMotor = null;
-    public Servo rightButtonPusher = null;
-    public Servo leftButtonPusher = null;
-    public Servo dropper = null;
-    public Servo cattleGuard = null;
+    //public Servo rightButtonPusher = null;
+    //public Servo leftButtonPusher = null;
+    //public Servo dropper = null;
+    //public Servo cattleGuard = null;
+    public Servo reuptake = null;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -66,6 +67,7 @@ public class HardwareAimbot
        // leftButtonPusher  = initServo("left_button_push", 1.0, false);
         //dropper           = initServo("dropper", 0.0, false);
         //cattleGuard       = initServo("cattleguard", 0.0, true);
+        reuptake = initServo("Re-uptake",0.75,true);
     }
 
     /***

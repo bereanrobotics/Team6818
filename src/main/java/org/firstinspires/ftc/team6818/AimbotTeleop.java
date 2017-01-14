@@ -35,6 +35,7 @@ package org.firstinspires.ftc.team6818;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -56,6 +57,16 @@ public class AimbotTeleop extends OpMode{
     protected boolean sniperModeOn = true;
 
     private String LOG_TAG = "AIMBOT TELEOP - ";
+    ElapsedTime runtime = new ElapsedTime();
+
+    double qermyStartPos = 0.4;
+    double qermyEndPos = 1;
+    double qermyOffset = 0.4;
+    double qermySpeed = 0.01;
+    boolean delayOn = false;
+    boolean readyForTimerReset = true;
+    boolean needsTimerReset = true;
+
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -79,6 +90,8 @@ public class AimbotTeleop extends OpMode{
     public void init_loop() {
     }
 
+
+
     /*
      * Code to run ONCE when the driver hits PLAY
      */
@@ -96,16 +109,20 @@ public class AimbotTeleop extends OpMode{
         double right;
         double launcherpower;
         double spinnerpower;
-        double RightButtonPosition;
-        double LeftButtonPosition;
+        double qermyOffset;
+        //double pusherUpLeftPos = 1;
+        //double pusherDownPos = 0.4;
+        //double RightButtonPosition;
+        //double LeftButtonPosition;
 
 
         left = gamepad1.left_stick_y;
         right = gamepad1.right_stick_y;
-        spinnerpower = gamepad2.right_stick_y;
+        spinnerpower = gamepad2.right_stick_x;
         launcherpower = gamepad2.left_stick_y;
-        RightButtonPosition = gamepad2.right_stick_x;
-        LeftButtonPosition = gamepad2.left_stick_x;
+        qermyOffset = gamepad2.right_trigger;
+        //RightButtonPosition = gamepad2.right_stick_x;
+        //LeftButtonPosition = gamepad2.left_stick_x;
 
         if (!sniperModeOn) {
             robot.frontLeftMotor.setPower(left);
@@ -128,10 +145,41 @@ public class AimbotTeleop extends OpMode{
         {
             sniperModeOn = false;
         }
+
+        if (gamepad2.x && !delayOn)
+        {
+            delayOn = true;
+        }
+        if (delayOn && qermyOffset > qermyEndPos)
+        {
+            qermyOffset -= qermySpeed;
+        }
+        if (delayOn && qermyOffset <= qermyEndPos)
+        {
+            if (readyForTimerReset)
+            {
+                runtime.reset();
+                readyForTimerReset = false;
+            }
+            if (runtime.seconds() > 1)
+            {
+                delayOn = false;
+            }
+
+        }
+        if (qermyOffset < qermyStartPos && !delayOn)
+        {
+            readyForTimerReset = true;
+            qermyOffset += qermySpeed;
+        }
+
+        robot.reuptake.setPosition(qermyOffset);
+
         robot.spinner.setPower(spinnerpower);
         robot.launcher.setPower(launcherpower);
-        robot.rightButtonPusher.setPosition(RightButtonPosition);
-        robot.leftButtonPusher.setPosition(LeftButtonPosition);
+
+        //robot.rightButtonPusher.setPosition(RightButtonPosition);
+        //robot.leftButtonPusher.setPosition(LeftButtonPosition);
 
 
         /*
@@ -160,6 +208,7 @@ public class AimbotTeleop extends OpMode{
         //telemetry.addData("claw",  "Offset = %.2f", clawOffset);
         telemetry.addData("left",  "%.2f", left);
         telemetry.addData("right", "%.2f", right);
+        telemetry.addData("qermy", "%.2f", qermyOffset);
         updateTelemetry(telemetry);
     }
 

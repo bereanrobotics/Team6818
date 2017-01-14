@@ -24,7 +24,7 @@ public class HardwareDoppleBotAimbot extends DoppleBot
     private static int MAX_SPEED_FOR_ANDYMARK = 2184; //actual max is 2800  making max 80% to handle battery power loss
 
     /* Public OpMode members. */
-    public DeviceInterfaceModule cdi = null; // core device interface
+    //public DeviceInterfaceModule cdi = null; // core device interface
     public DcMotor frontLeftMotor = null;
     public DcMotor frontRightMotor = null;
     public DcMotor backLeftMotor = null;
@@ -32,16 +32,18 @@ public class HardwareDoppleBotAimbot extends DoppleBot
     public DcMotor spinner = null;
     public DcMotor launcher = null;
     //public DcMotor dankMeme2016 = null;
-    public Servo rightButtonPusher = null;
-    public Servo leftButtonPusher = null;
+    //public Servo rightButtonPusher = null;
+    //public Servo leftButtonPusher = null;
 
-    public Servo dropper = null;
-    public Servo cattleGuard = null;
+    //public Servo dropper = null;
+    //public Servo cattleGuard = null;
     //public LightSensor lightSensor;
 
+    public Servo reuptake = null;
+
     // magic low level access to the MR color sensor as an i2c device
-    private I2cDevice colorC;
-    private I2cDeviceSynch colorCreader;
+    //private I2cDevice colorC;
+    //private I2cDeviceSynch colorCreader;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -91,12 +93,12 @@ public class HardwareDoppleBotAimbot extends DoppleBot
     }
 
     // we have to read directly from the I2c port since MR doesn't let us read what we need.
-    private void initColorSensor()  {
-        colorC = hwMap.i2cDevice.get("cc");
-        colorCreader = new I2cDeviceSynchImpl(colorC, I2cAddr.create8bit(0x3c), false);
-        colorCreader.engage();
-        colorCreader.write8(3, 1);  // put sensor in Passive mode (0 for active)
-    }
+    //private void initColorSensor()  {
+        //colorC = hwMap.i2cDevice.get("cc");
+        //colorCreader = new I2cDeviceSynchImpl(colorC, I2cAddr.create8bit(0x3c), false);
+        //colorCreader.engage();
+        //colorCreader.write8(3, 1);  // put sensor in Passive mode (0 for active)
+    //}
 
 
     /* Initialize standard Hardware interfaces */
@@ -112,12 +114,13 @@ public class HardwareDoppleBotAimbot extends DoppleBot
         backLeftMotor   = initMotorWithEncoder("left_back", true);
         backRightMotor  = initMotorWithEncoder("right_back", false);
         spinner = initMotor("robot_spinner", true);
-        launcher = initMotor("launcher" , true);
+        launcher = initMotorWithEncoder("launcher" , true);
         //catapultMotor = initMotor("meme", true);
 
         // Define and initialize ALL installed servos.
-        rightButtonPusher = initServo("right_button_push", 0.0, false);
-        leftButtonPusher  = initServo("left_button_push", 1.0, false);
+        //rightButtonPusher = initServo("right_button_push", 0.0, false);
+        //leftButtonPusher  = initServo("left_button_push", 1.0, false);
+        reuptake = initServo("Re-uptake", 0.75, true);
 
         addRobotComponent("left_front",frontLeftMotor);
         addRobotComponent("right_front", frontRightMotor);
@@ -125,15 +128,16 @@ public class HardwareDoppleBotAimbot extends DoppleBot
         addRobotComponent("right_back", backRightMotor);
         addRobotComponent("robot_spinner",spinner);
         addRobotComponent("launcher", launcher);
-        addRobotComponent("right_button_push", rightButtonPusher);
-        addRobotComponent("left_button_push", leftButtonPusher);
+        //addRobotComponent("right_button_push", rightButtonPusher);
+        //addRobotComponent("left_button_push", leftButtonPusher);
+        addRobotComponent("Re-uptake", reuptake);
 
         //dropper           = initServo("dropper", 0.0, false);
         //cattleGuard       = initServo("cattleguard", 0.0, true);
         //lightSensor = hwMap.lightSensor.get("light");
         // save a reference to the core device interface to set LED lights
-        cdi = hwMap.deviceInterfaceModule.get("cdi");
-        initColorSensor();
+        //cdi = hwMap.deviceInterfaceModule.get("cdi");
+        //initColorSensor();
 
     }
 
@@ -151,19 +155,19 @@ public class HardwareDoppleBotAimbot extends DoppleBot
         drive(0, 0);
     }
 
-    public int getColorNumber() {
-        byte[] colorCcache;
-        colorCcache = colorCreader.read(0x04, 1);
-        return(colorCcache[0] & 0xFF);
-    }
+    //public int getColorNumber() {
+        //byte[] colorCcache;
+        //colorCcache = colorCreader.read(0x04, 1);
+        //return(colorCcache[0] & 0xFF);
+    //}
 
-    public void redLED(boolean state) {
-        cdi.setLED(1, state);
-    }
+    //public void redLED(boolean state) {
+        //cdi.setLED(1, state);
+    //}
 
-    public void blueLED(boolean state) {
-        cdi.setLED(0, state);
-    }
+    //public void blueLED(boolean state) {
+        //cdi.setLED(0, state);
+    //}
 
 
     /***
